@@ -1,4 +1,4 @@
-  var formwiz = {
+  var formSpinner = {
     element: '',
     form: [],
     position: 0,
@@ -31,21 +31,21 @@
           type: 'submit',
           value: pt.submit_label
        }
-      this.wrap = $('<div>', {
+      this.wrap = jQuery('<div>', {
         id: 'fw_wrap'
       });
-      var pos_i = $('<div/>');
+      var pos_i = jQuery('<div/>');
       pos_i.css({
         'height': pt.style.indicator.height,
         'width': '100%',
         'background-color': '#000',
         'border-bottom': '1px solid '+pt.style.indicator.border
       });
-      var pi_width = $('#'+this.element).width() / (this.form.length) -1 ;
-      $('#'+this.element).append(pos_i);
+      var pi_width = jQuery('#'+this.element).width() / (this.form.length) -1 ;
+      jQuery('#'+this.element).append(pos_i);
 
       for(i = 0; i <= this.form.length -1; i++) {
-        var pi_inc = $('<div/>', {
+        var pi_inc = jQuery('<div/>', {
           id: 'pi-'+i,
           css: {
             'width': pi_width+'px',
@@ -63,7 +63,7 @@
         }
         pos_i.append(pi_inc);
       }
-      $('#'+this.element).append(this.wrap);
+      jQuery('#'+this.element).append(this.wrap);
       this.fw_show(this.position);
     },
 
@@ -97,14 +97,14 @@
     button_next: function(pos) {
       pt  = this;
       pt.form[pos].value = pt.form_tag.val();
-      $(pt.wrap).hide().empty();;
+      jQuery(pt.wrap).hide().empty();;
       if(pt.position == pt.form.length -1) {
         pt.show_submit();
       } else {
         pt.position++;
         pt.fw_show(pt.position);
-        $(pt.wrap).show();
-        $(pt.form_tag).focus();
+        jQuery(pt.wrap).show();
+        jQuery(pt.form_tag).focus();
       }
 
     },
@@ -115,7 +115,7 @@
       pt = this;
       /* Form Tag Element
        * ================ */
-      pt.form_tag = $('<input>', {
+      pt.form_tag = jQuery('<input>', {
         type: this.form[pos].type,
         id: this.form[pos].id,
         value: this.form[pos].value,
@@ -125,7 +125,7 @@
 
       /* Next Button Element
        * =================== */
-      var next_btn = $('<button/>', {
+      var next_btn = jQuery('<button/>', {
         text: '>>',
       });
       next_btn.css('width', '30px');
@@ -143,11 +143,11 @@
 
       /* Append form_tag & next_btn
        * ========================== */
-      $('#pi-'+pos).css('background-color', pt.style.indicator.selected);
-      $(this.wrap).append(pt.form_tag);
-      $(pt.form_tag).focus();
+      jQuery('#pi-'+pos).css('background-color', pt.style.indicator.selected);
+      jQuery(this.wrap).append(pt.form_tag);
+      jQuery(pt.form_tag).focus();
       if(pt.form[pos].type != 'submit') {
-        $(this.wrap).append(next_btn);
+        jQuery(this.wrap).append(next_btn);
       }
     } // ======= end fw_show
   }   // ======= End of Class
