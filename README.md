@@ -19,5 +19,36 @@ Form elements are created with an array of javascript objects.
   'label': 'displayed_as_placeholder'
 }
 ```
+### Select Field
+```
+{
+  'id': 'name_of_field',
+  'type': 'select',
+  'label': 'unused_for_now',
+  'options' : {
+    'val1': 'display_text',
+    'val2': 'display_text'
+  }
+}
+```
 
+### Complete JS option object
+```
+var options = [
+  {
+    'id': 'first_name',
+    'type': 'text',
+    'label': 'First Name'
+  },
+  {
+    'id': 'state',
+    'type': 'select',
+    'label': 'State',
+    'options': {
+      'CA': 'California',
+      'NV': 'Nevada'
+    }
+  }
 
+]
+```
