@@ -6,6 +6,7 @@
     form_tag: '',
     submit_label: 'Submit the Form',
     return_value: '',
+    slide_time: 500,
     style: {
       indicator: {
         selected: '#AAA',
@@ -23,6 +24,7 @@
      * ==================================================================== */
     fw_start: function() {
       pt = this;
+      pt.origForm = pt.form;
 
       /* Add submit element to form
        * ========================== */
@@ -34,6 +36,9 @@
       this.wrap = jQuery('<div>', {
         id: 'fw_wrap'
       });
+
+      /* Create the position indicator
+       * ============================= */
       var pos_i = jQuery('<div/>');
       pos_i.css({
         'height': pt.style.indicator.height,
@@ -88,6 +93,18 @@
         async: pt.ajax.async,
         success: function(data, stat, jqXHR) {
           pt.return_value = data;
+          jQuery(pt.wrap).show();
+          jQuery(pt.wrap).html("Thanks for your data");
+          setTimeout(function() {
+            var opts = {};
+            jQuery(pt.wrap).effect("fade", opts, 200, function() {
+              pt.form = pt.origForm;
+              pt.position = 0;
+              jQuery('#'+pt.element).empty();
+              pt.fw_start();
+            });
+
+          }, 2000);
         }
       });
     },
@@ -97,16 +114,23 @@
     button_next: function(pos) {
       pt  = this;
       pt.form[pos].value = pt.form_tag.val();
-      jQuery(pt.wrap).hide().empty();;
-      if(pt.position == pt.form.length -1) {
-        pt.show_submit();
-      } else {
-        pt.position++;
-        pt.fw_show(pt.position);
-        jQuery(pt.wrap).show();
-        jQuery(pt.form_tag).focus();
-      }
+      jQuery(pt.wrap).effect("slide", { direction: 'right', mode: 'hide'}, pt.slide_time, function() {
+        jQuery(pt.wrap).hide();
+        jQuery(pt.wrap).empty();
 
+        if(pt.position == pt.form.length -1) {
+          pt.show_submit();
+        } else {
+          pt.position++;
+          pt.fw_show(pt.position);
+          jQuery(pt.wrap).show("slide", { direction: 'left'}, pt.slide_time);
+
+          // Wait till the slide effect has completed to set focus.
+          setTimeout(function() { 
+            jQuery(pt.form_tag).focus();
+          }, (pt.slide_time * 2));
+        }
+      });
     },
 
     /* Generates the form tag and appends to element
@@ -115,6 +139,8 @@
       pt = this;
       /* Form Tag Element
        * ================ */
+      if(this.form[pos].type != 'select') {
+      // text tag
       pt.form_tag = jQuery('<input>', {
         type: this.form[pos].type,
         id: this.form[pos].id,
@@ -122,6 +148,19 @@
         placeholder: this.form[pos].label
       }); // End form tag
       pt.form_tag.css('margin-right', '4px');
+      } else {
+      // select tag
+      pt.form_tag = jQuery('<select/>', {
+        id: this.form[pos].id,
+      });
+      for (var key in this.form[pos].options) {
+        var opt = jQuery('<option/>', {
+          value: key,
+          html: this.form[pos].options[key]
+        });
+        jQuery(pt.form_tag).append(opt);
+      }
+      }
 
       /* Next Button Element
        * =================== */
